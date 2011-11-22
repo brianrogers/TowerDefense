@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Hungry Ants</title>
+	<link rel="stylesheet" href="css/hungryants.css" type="text/css" media="screen" charset="utf-8">
+	<script src="scripts/modernizr-2.0.6.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="scripts/jquery-1.6.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+	<script src="scripts/plugins.js" type="text/javascript" charset="utf-8"></script>
+	<script src="scripts/towerdefense.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div id="top">
+	<div id="game-title">HUNGRY ANTS</div>
+	<div id="next-wave-container"><button id="next-wave-button">Next Wave</button></div>
+</div>
+<div id="middle">
+	<div id="map"></div>
+	<div id="missed-bad-guys">
+		<div id="missed-bgs-goal"></div>
+		<div id="missed-bgs-5"></div>
+		<div id="missed-bgs-4"></div>
+		<div id="missed-bgs-3"></div>
+		<div id="missed-bgs-2"></div>
+		<div id="missed-bgs-1"></div>
+	</div>
+</div>
+<div id="bottom">
+	<div id="score-container">
+		<div id="score"></div>
+	</div>
+	<div id="weapon-store">
+	</div>
+	<div id="weapon-detail-container">
+		<div id="weapon-image"></div>
+		<button id="upgrade-weapon">Upgrade</button>
+	</div>
+</div>
+<div id="start-dialog"><button id="start-game-button">Start Game</button></div>
+<div id="level-complete-dialog">You have completed this level. Good Job!</div>
+<div id="game-over-dialog">Game Over</div>
+<script>
+	$(document).ready(function(){
+
+		TowerDefense.init(Level1);
+
+	});
+</script>	
+</body>
+</html>
