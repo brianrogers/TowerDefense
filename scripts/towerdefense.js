@@ -1,3 +1,14 @@
+/*jshint  browser:  true,
+          eqeqeq:   true,
+          immed:    false,
+          newcap:   true,
+          nomen:    false,
+          onevar:   false,
+          plusplus: false,
+          undef:    true,
+          white:    false */
+/*global  window, jQuery, $, log */
+
 window.TowerDefense = (function($){
 	//var gameInterval;
 	var td = {};
@@ -50,7 +61,7 @@ window.TowerDefense = (function($){
 			td.Start();
 		});
 		$('#next-wave-button').hide();
-	}
+	};
 	
 	td.BuildMap = function(){
 		$("#map").append("<div>");
@@ -61,7 +72,7 @@ window.TowerDefense = (function($){
 				}else{
 					$("#map").append('<div id="'+i+'_'+j+'" class="map-cell"></div>');					
 				}
-			};
+			}
 		}
 		$("#map").append("</div>");	
 	};
@@ -89,32 +100,79 @@ window.TowerDefense = (function($){
 		
 		td.UpdateScore();
 		td.UpdateAvailableWeapons();
-	}
+	};
 	
 	td.ShowBadGuysOnMap = function(){
 		var bad_guys = td.current_level.waves[td.wave].bad_guys;
 		var map_path = td.current_level.map_path;
 		var weapons = td.player.weapons;
-		
+		var current_rotation;
+		var previous_rotation;
 		// show bad guys
 		for(var i=0;i<bad_guys.length;i++){
 			//remove old pos
 			$('#'+map_path[bad_guys[i].current_position]).html('');
-			
+			previous_rotation = td.GetPathRotation(map_path[bad_guys[i].current_position], map_path[bad_guys[i].current_position+1]);
 			if(bad_guys[i].hp>0){
 				bad_guys[i].current_position++;
+				//check for rotation
+				current_rotation = td.GetPathRotation(map_path[bad_guys[i].current_position], map_path[bad_guys[i].current_position+1]);
 				//add at new pos
-				$('#'+map_path[bad_guys[i].current_position]).append("<div class='"+bad_guys[i].style+"'></div>");
+				$('#'+map_path[bad_guys[i].current_position]).append("<img src='images/"+bad_guys[i].image+"' class='"+bad_guys[i].style+"'></img>");
 				bad_guys[i].currentCell = map_path[bad_guys[i].current_position];
+				
+				$('#'+map_path[bad_guys[i].current_position]+' img').rotate({
+							duration: 500,
+				            angle: parseInt(previous_rotation), 
+				            animateTo:parseInt(current_rotation)
+				});
 			}
 			
-			if((bad_guys[i].current_position >= map_path.length) && (bad_guys[i].hp > 0) && bad_guys[i].madeit == 0){
+			if((bad_guys[i].current_position >= map_path.length) && (bad_guys[i].hp > 0) && bad_guys[i].madeit === 0){
 				bad_guys[i].madeit = 1;
 				td.missedBadGuys++;
 				td.UpdateMissedBadGuys();
 			}
 		}
-	}
+		
+	};
+	
+	td.GetPathRotation = function(pos1, pos2) {
+		var rotation = '';
+		
+		var Row1 = parseInt(String(pos1).split('_')[0]);
+		var Col1 = parseInt(String(pos1).split('_')[1]);
+		var Row2 = parseInt(String(pos2).split('_')[0]);
+		var Col2 = parseInt(String(pos2).split('_')[1]);
+		
+		if(Row1<Row2){
+			rotation = 180;
+		}
+		
+		if(Row2<Row1){
+			rotation = 0;
+		}
+		
+		if(Col1<Col2){
+			rotation = 90;
+		}
+		
+		if(Col2<Col1){
+			rotation = -90;
+		}
+		
+		if(Col1==0){
+			rotation = 90;
+		}
+		
+		if(Col1>=td.current_level.map_path.length){
+			rotation = 90;
+		}
+		
+		log(rotation);
+		
+		return rotation;
+	};
 	
 	td.CheckForHits = function(){
 		
@@ -149,7 +207,8 @@ window.TowerDefense = (function($){
 		for (var k=0; k < killed_guys.length; k++) {
 			bad_guys.splice(killed_guys[k],1);
 		}
-	}
+		
+	};
 	
 	td.ShowWeaponsOnMap = function(){
 		//show weapons
@@ -163,20 +222,21 @@ window.TowerDefense = (function($){
 					td.ShowWeaponDetails($(this).attr('weapon_id'));
 					
 				});
-			})
+			});
 		}
-	}
+		
+	};
 	
 	td.ShowWeaponDetails = function(weapon){
 		var weapons = td.player.weapons;
 		log(weapons[weapon]);
 		
-	}
+	};
 	
 	td.LevelComplete = function(){
 		log('levelComplete');
 		$("#level-complete-dialog").show();
-	}
+	};
 	
 	td.IsWaveOver = function(){
 		var result = true;
@@ -194,30 +254,31 @@ window.TowerDefense = (function($){
 			}		
 		
 			//check to see if the last one made it to the end
-			if(bad_guys[bad_guys.length-1].current_position==map_path.length){
+			if(bad_guys[bad_guys.length-1].current_position===map_path.length){
 				result = true;
 			}
 		}else{
 			result = true;
 		}
+		
 		return result;
-	}
+	};
 	
 	td.UpdateScore = function(){
 		$('#score').html("You Have $"+td.score);
-	}
+	};
 	
 	td.IsHit = function(badguy_pos, weapon_pos, range){
 		//log('comparing: '+badguy_pos+' with '+badguy_pos+' range='+range);
 		//setup the comparison
 		//only care about range for weapon_pos
-		bgRow = parseInt(String(badguy_pos).split('_')[0]);
-		bgCol = parseInt(String(badguy_pos).split('_')[1]);
-		wRow = parseInt(String(weapon_pos).split('_')[0]);
-		wCol = parseInt(String(weapon_pos).split('_')[1]);
+		var bgRow = parseInt(String(badguy_pos).split('_')[0]);
+		var bgCol = parseInt(String(badguy_pos).split('_')[1]);
+		var wRow = parseInt(String(weapon_pos).split('_')[0]);
+		var wCol = parseInt(String(weapon_pos).split('_')[1]);
 
-		weaponRowRange = td.GetRangeArray(wRow,range);
-		weaponColRange = td.GetRangeArray(wCol,range);
+		var weaponRowRange = td.GetRangeArray(wRow,range);
+		var weaponColRange = td.GetRangeArray(wCol,range);
 
 		//log(weaponRowRange);
 		//log(weaponColRange);
@@ -247,14 +308,14 @@ window.TowerDefense = (function($){
 	td.GameOver = function(){
 		clearInterval(td.gameInterval); // kill the game loop
 		$("#game-over-dialog").show();
-	}
+	};
 	
 	td.UpdateMissedBadGuys = function(){
 		$('#missed-bgs-'+td.missedBadGuys).css('visibility','visible');
 		if(td.missedBadGuys>5){
 			td.GameOver();
 		}
-	}
+	};
 	
 	td.UpdateAvailableWeapons = function(){
 		var available_weapons = td.current_level.available_weapons;
@@ -279,14 +340,14 @@ window.TowerDefense = (function($){
 					});
 					$('#weapon-for-sale'+i).bind("touchstart touchmove", td.moveMe);
 				}
-			};
+			}
 		
 		td.scoreChanged = false; //reset the flag
 		}
 	};
 	
 	td.GetRangeArray = function(start, range){
-		var result = new Array();
+		var result = [];
 		start = parseInt(start);
 		range = parseInt(range);
 		
@@ -352,6 +413,7 @@ var Level1 = {'map_path' :
 {'bad_guys' : [{
 	"name":"ant1",
 	"style":"ant1",
+	"image":"black-ant-big.png",
 	"current_position":0,
 	"hp":2,
 	"value":10,
@@ -360,6 +422,7 @@ var Level1 = {'map_path' :
 	{
 	"name":"ant2",
 	"style":"ant1",
+	"image":"black-ant-big.png",
 	"current_position":-5,
 	"hp":2,
 	"value":10,
@@ -368,6 +431,7 @@ var Level1 = {'map_path' :
 	{
 	"name":"ant3",
 	"style":"ant1",
+	"image":"black-ant-big.png",
 	"current_position":-10,
 	"hp":5,
 	"value":10,
@@ -376,6 +440,7 @@ var Level1 = {'map_path' :
 	{
 	"name":"ant4",
 	"style":"ant2",
+	"image":"red-ant-big.png",
 	"current_position":-12,
 	"hp":7,
 	"value":10,
@@ -386,6 +451,7 @@ var Level1 = {'map_path' :
 	'bad_guys' : [{
 		"name":"ant1",
 		"style":"ant1",
+		"image":"black-ant-big.png",
 		"current_position":0,
 		"hp":2,
 		"value":10,
@@ -394,6 +460,7 @@ var Level1 = {'map_path' :
 		{
 		"name":"ant2",
 		"style":"ant1",
+		"image":"black-ant-big.png",
 		"current_position":-5,
 		"hp":2,
 		"value":10,
@@ -402,6 +469,7 @@ var Level1 = {'map_path' :
 		{
 		"name":"ant3",
 		"style":"ant1",
+		"image":"black-ant-big.png",
 		"current_position":-10,
 		"hp":5,
 		"value":10,
@@ -410,6 +478,7 @@ var Level1 = {'map_path' :
 		{
 		"name":"ant4",
 		"style":"ant2",
+		"image":"red-ant-big.png",
 		"current_position":-12,
 		"hp":7,
 		"value":10,

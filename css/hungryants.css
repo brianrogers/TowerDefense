@@ -162,30 +162,39 @@ body {
 	height:70px;
 	width: 120px;
 	background-color: blue;
+	background-image: url('../images/black-ant-big.png');
 }
 
 #missed-bgs-2 {
 	height:70px;
 	width: 120px;
 	background-color: green;
+	background-image: url('../images/black-ant-big.png');
+	
 }
 
 #missed-bgs-3 {
 	height:70px;
 	width: 120px;
 	background-color: yellow;
+	background-image: url('../images/black-ant-big.png');
+	
 }
 
 #missed-bgs-4 {
 	height:70px;
 	width: 120px;
 	background-color: red;
+	background-image: url('../images/black-ant-big.png');
+	
 }
 
 #missed-bgs-5 {
 	height:70px;
 	width: 120px;
 	background-color: black;
+	background-image: url('../images/black-ant-big.png');
+	
 }
 
 #bottom {
@@ -237,16 +246,14 @@ body {
 /* bad guys */
 
 .ant1 {
-	width:20px;
-	height:20px;
-	background-color:black;
+	width:40px;
+	height:40px;
 	margin: 10px;
 }
 
 .ant2 {
-	width:20px;
-	height:20px;
-	background-color:red;
+	width:40px;
+	height:40px;
 	margin: 10px;
 }
 
