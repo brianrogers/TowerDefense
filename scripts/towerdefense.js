@@ -12,7 +12,7 @@
 window.TowerDefense = (function($){
 	//var gameInterval;
 	var td = {};
-	
+	td.touchEnabled = false;
 	td.score = 30;
 	td.scoreChanged = true; //start at true - will be changed when store is built
 	td.current_step = 0;
@@ -22,7 +22,16 @@ window.TowerDefense = (function($){
 	td.wave = 0;
 	
 	td.init = function(levelData){
-		log('init called with ', levelData);
+		//check for touch
+		if($('html').hasClass('no-touch')){
+			//laptop without touch
+			td.touchEnabled = false;
+		}else if($('html').hasClass('touch')){
+			//mobile touch device
+			td.touchEnabled = true;
+		}
+		
+		//log('init called with ', levelData);
 		td.current_level = levelData;
 		td.BuildMap();
 		//td.Start();
@@ -48,9 +57,14 @@ window.TowerDefense = (function($){
 		td.gameInterval = setInterval(td.GameLoop, td.gameSpeed);
 		
 		$('.map-cell').each(function(){
-			$(this).droppable({
-				drop: td.handleDropEvent
-			});
+			if(td.touchEnabled){
+				webkit_drop.add($(this).attr('id'), {onDrop : function(elem, e){td.handleTouchDropEvent(elem,e,$(this).attr('id'))}});
+				
+			}else{
+				$(this).droppable({
+					drop: td.handleDropEvent
+				});
+			}
 		});
 		
 		td.UpdateScore();
@@ -87,7 +101,7 @@ window.TowerDefense = (function($){
 				
 		// check to see if the wave is over
 		if(td.IsWaveOver()){
-			log('wave over');
+			//log('wave over');
 			clearInterval(td.gameInterval);
 			if(td.current_level.waves.length == td.wave+1){
 				$('#next-wave-button').hide();
@@ -169,8 +183,6 @@ window.TowerDefense = (function($){
 			rotation = 90;
 		}
 		
-		log(rotation);
-		
 		return rotation;
 	};
 	
@@ -188,7 +200,7 @@ window.TowerDefense = (function($){
 				if(td.IsHit(bad_guys[i].currentCell,weapons[w].position,weapons[w].range)){
 					weapons[w].hits++;
 					bad_guys[i].hp = bad_guys[i].hp - weapons[w].damage; //take away hit points
-					log(weapons[w].name + ' did ' + weapons[w].damage + 'points of damage leaving '+bad_guys[i].hp+' hp');
+					//log(weapons[w].name + ' did ' + weapons[w].damage + 'points of damage leaving '+bad_guys[i].hp+' hp');
 					//check to see if this bad guy is dead
 					if(bad_guys[i].hp<=0){	
 						$('#'+map_path[bad_guys[i].current_position]).html('');
@@ -229,12 +241,12 @@ window.TowerDefense = (function($){
 	
 	td.ShowWeaponDetails = function(weapon){
 		var weapons = td.player.weapons;
-		log(weapons[weapon]);
+		//log(weapons[weapon]);
 		
 	};
 	
 	td.LevelComplete = function(){
-		log('levelComplete');
+		//log('levelComplete');
 		$("#level-complete-dialog").show();
 	};
 	
@@ -289,7 +301,7 @@ window.TowerDefense = (function($){
 			//log('looking for '+bgRow+' in '+weaponRowRange);
 			//log(ArrayIncludes(weaponRowRange, bgRow));
 			if(td.ArrayIncludes(weaponRowRange, bgRow)){
-				log('hit');
+				//log('hit');
 				result = true;
 			}
 		}
@@ -297,7 +309,7 @@ window.TowerDefense = (function($){
 			//log('looking for '+bgCol+' in '+weaponColRange);
 			//log(ArrayIncludes(weaponColRange,bgCol));
 			if(td.ArrayIncludes(weaponColRange,bgCol)){
-				log('hit');
+				//log('hit');
 				result = true;
 			}
 		}
@@ -332,13 +344,20 @@ window.TowerDefense = (function($){
 				}else{
 					$('#weapon-for-sale'+i).fadeTo('slow',1);
 					//setup the draggable events
-					$('#weapon-for-sale'+i).liveDraggable({
-						containment: '#map',
-						    cursor: 'move',
-						    snap: '#map',
-							helper: 'clone'
-					});
-					$('#weapon-for-sale'+i).bind("touchstart touchmove", td.moveMe);
+					if(!td.touchEnabled){
+						//jqueryui draggable stuffs for laptop
+						$('#weapon-for-sale'+i).liveDraggable({
+							containment: '#map',
+							    cursor: 'move',
+							    snap: '#map',
+								helper: 'clone'
+						});
+						$('#weapon-for-sale'+i).bind("touchstart touchmove", td.moveMe);
+					}else{
+						//do something special for ipad/iphone
+						var weapon_draggable = new webkit_draggable('weapon-for-sale'+i, {revert : false});
+						
+					}
 				}
 			}
 		
@@ -368,7 +387,7 @@ window.TowerDefense = (function($){
 	};
 	
 	td.moveMe = function(e) {
-		log('moveMe called');
+		//log('moveMe called');
 	  e.preventDefault();
 	  var orig = e.originalEvent;
 	  $(this).css({
@@ -398,6 +417,42 @@ window.TowerDefense = (function($){
 		td.score = td.score - ui.draggable.text().replace('$','');
 		td.scoreChanged = true;
 	};
+	
+	td.handleTouchDropEvent = function(htmlElement, event, targetElement){
+		log($(htmlElement).position().left + ' - ' + $(htmlElement).position().top);
+		var wLeft = $(htmlElement).position().left;
+		var wTop = $(htmlElement).position().top;
+
+		var targetPosition;
+
+		$('.map-cell').each(function(){
+			if(td.ArrayIncludes(td.GetRangeArray($(this).position().left,30),wLeft)){
+				if(td.ArrayIncludes(td.GetRangeArray($(this).position().top,30),wTop)){
+					log($(this).attr('id'));
+					targetPosition = $(this).attr('id');
+				}
+			}
+		});
+
+		
+		//add to your weapons list
+		td.player.weapons.push(
+		{
+		"name":"w1",
+		"position":targetPosition,
+		"range":"1",
+		"hits":0,
+		"max-hits":50,
+		"style":$(htmlElement).attr('class'),
+		"damage":$(htmlElement).attr('damage')
+		});
+
+		td.ShowWeaponsOnMap();
+
+		//deduct the money from your score
+		td.score = td.score - $(htmlElement).text().replace('$','');
+		td.scoreChanged = true;
+	}
 	
 	return td;
 }(jQuery));
