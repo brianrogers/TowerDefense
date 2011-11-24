@@ -15,7 +15,7 @@
     "node" : true,
     "es5" : true,
     "browser" : true,
-
+	"loopfunc" : false,
     "boss" : false,
     "curly": false,
     "debug": false,
@@ -36,5 +36,5 @@
     "undef": true,
     "sub": true,
     "strict": false,
-    "white": true
+    "white": false
 }
