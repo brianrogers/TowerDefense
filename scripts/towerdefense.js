@@ -1,7 +1,7 @@
 /*jshint  browser:  true,
           eqeqeq:   true,
           immed:    false,
-          newcap:   true,
+          newcap:   false,
           nomen:    false,
           onevar:   false,
           plusplus: false,
@@ -36,8 +36,8 @@ window.TowerDefense = (function($){
 		td.current_level = levelData;
 		td.BuildMap();
 		//td.Start();
-		
-		for(var i=1; i < 6 ;i++){
+		var i;
+		for(i=1; i < 6 ;i++){
 			$('#missed-bgs-'+i).css('visibility','hidden');
 		}
 		
@@ -463,114 +463,6 @@ function Player(){
 	this.score = 0;
 }
 
-var Level1 = {'map_path' : 
-['6_0','6_1','6_2','6_3','6_4','5_4','4_4','3_4','2_4','1_4','1_5','1_6','2_6','2_7','3_7','4_7','4_8','5_8','5_9','5_10','4_10','4_11','4_12','4_13','5_13','5_14'],
-'waves' : [
-{'bad_guys' : [{
-	"name":"ant1",
-	"style":"ant1",
-	"image":"black-ant-big.png",
-	"current_position":0,
-	"hp":2,
-	"value":10,
-	"madeit":0
-	},
-	{
-	"name":"ant2",
-	"style":"ant1",
-	"image":"black-ant-big.png",
-	"current_position":-5,
-	"hp":2,
-	"value":10,
-	"madeit":0
-	},
-	{
-	"name":"ant3",
-	"style":"ant1",
-	"image":"black-ant-big.png",
-	"current_position":-10,
-	"hp":5,
-	"value":10,
-	"madeit":0
-	},
-	{
-	"name":"ant4",
-	"style":"ant2",
-	"image":"red-ant-big.png",
-	"current_position":-12,
-	"hp":7,
-	"value":10,
-	"madeit":0
-	}]
-},
-{
-	'bad_guys' : [{
-		"name":"ant1",
-		"style":"ant1",
-		"image":"black-ant-big.png",
-		"current_position":0,
-		"hp":2,
-		"value":10,
-		"madeit":0
-		},
-		{
-		"name":"ant2",
-		"style":"ant1",
-		"image":"black-ant-big.png",
-		"current_position":-5,
-		"hp":2,
-		"value":10,
-		"madeit":0
-		},
-		{
-		"name":"ant3",
-		"style":"ant1",
-		"image":"black-ant-big.png",
-		"current_position":-10,
-		"hp":5,
-		"value":10,
-		"madeit":0
-		},
-		{
-		"name":"ant4",
-		"style":"ant2",
-		"image":"red-ant-big.png",
-		"current_position":-12,
-		"hp":7,
-		"value":10,
-		"madeit":0
-		}]
-}]
-,'available_weapons' : [{
-	"name":"w1",
-	"position":"",
-	"range":"1",
-	"hits":0,
-	"max-hits":50,
-	"style":"weapon1",
-	"cost":10,
-	"damage":1
-},
-{
-	"name":"w2",
-	"position":"",
-	"range":"1",
-	"hits":0,
-	"max-hits":80,
-	"style":"weapon2",
-	"cost":20,
-	"damage":2
-},
-{
-	"name":"w3",
-	"position":"",
-	"range":"2",
-	"hits":0,
-	"max-hits":80,
-	"style":"weapon3",
-	"cost":30,
-	"damage":5
-}]
-}
+
 
 
