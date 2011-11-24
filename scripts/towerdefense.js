@@ -6,8 +6,9 @@
           onevar:   false,
           plusplus: false,
           undef:    true,
+          loopfunc: false,
           white:    false */
-/*global  window, jQuery, $, log */
+/*global  window, jQuery, $, log, webkit_drop, webkit_draggable, Player */
 
 window.TowerDefense = (function($){
 	//var gameInterval;
@@ -58,7 +59,7 @@ window.TowerDefense = (function($){
 		
 		$('.map-cell').each(function(){
 			if(td.touchEnabled){
-				webkit_drop.add($(this).attr('id'), {onDrop : function(elem, e){td.handleTouchDropEvent(elem,e,$(this).attr('id'))}});
+				webkit_drop.add($(this).attr('id'), {onDrop : function(elem, e){td.handleTouchDropEvent(elem,e,$(this).attr('id'));}});
 				
 			}else{
 				$(this).droppable({
@@ -103,7 +104,7 @@ window.TowerDefense = (function($){
 		if(td.IsWaveOver()){
 			//log('wave over');
 			clearInterval(td.gameInterval);
-			if(td.current_level.waves.length == td.wave+1){
+			if(td.current_level.waves.length === td.wave+1){
 				$('#next-wave-button').hide();
 				td.LevelComplete();
 			}else{
@@ -137,8 +138,8 @@ window.TowerDefense = (function($){
 				
 				$('#'+map_path[bad_guys[i].current_position]+' img').rotate({
 							duration: 500,
-				            angle: parseInt(previous_rotation), 
-				            animateTo:parseInt(current_rotation)
+				            angle: parseInt(previous_rotation,10), 
+				            animateTo:parseInt(current_rotation,10)
 				});
 			}
 			
@@ -154,10 +155,10 @@ window.TowerDefense = (function($){
 	td.GetPathRotation = function(pos1, pos2) {
 		var rotation = '';
 		
-		var Row1 = parseInt(String(pos1).split('_')[0]);
-		var Col1 = parseInt(String(pos1).split('_')[1]);
-		var Row2 = parseInt(String(pos2).split('_')[0]);
-		var Col2 = parseInt(String(pos2).split('_')[1]);
+		var Row1 = parseInt(String(pos1).split('_')[0],10);
+		var Col1 = parseInt(String(pos1).split('_')[1],10);
+		var Row2 = parseInt(String(pos2).split('_')[0],10);
+		var Col2 = parseInt(String(pos2).split('_')[1],10);
 		
 		if(Row1<Row2){
 			rotation = 180;
@@ -175,7 +176,7 @@ window.TowerDefense = (function($){
 			rotation = -90;
 		}
 		
-		if(Col1==0){
+		if(Col1===0){
 			rotation = 90;
 		}
 		
@@ -284,10 +285,10 @@ window.TowerDefense = (function($){
 		//log('comparing: '+badguy_pos+' with '+badguy_pos+' range='+range);
 		//setup the comparison
 		//only care about range for weapon_pos
-		var bgRow = parseInt(String(badguy_pos).split('_')[0]);
-		var bgCol = parseInt(String(badguy_pos).split('_')[1]);
-		var wRow = parseInt(String(weapon_pos).split('_')[0]);
-		var wCol = parseInt(String(weapon_pos).split('_')[1]);
+		var bgRow = parseInt(String(badguy_pos).split('_')[0],10);
+		var bgCol = parseInt(String(badguy_pos).split('_')[1],10);
+		var wRow = parseInt(String(weapon_pos).split('_')[0],10);
+		var wCol = parseInt(String(weapon_pos).split('_')[1],10);
 
 		var weaponRowRange = td.GetRangeArray(wRow,range);
 		var weaponColRange = td.GetRangeArray(wCol,range);
@@ -297,7 +298,7 @@ window.TowerDefense = (function($){
 
 		var result = false;
 		
-		if(bgCol==wCol){ //same column, check row range
+		if(bgCol===wCol){ //same column, check row range
 			//log('looking for '+bgRow+' in '+weaponRowRange);
 			//log(ArrayIncludes(weaponRowRange, bgRow));
 			if(td.ArrayIncludes(weaponRowRange, bgRow)){
@@ -305,7 +306,7 @@ window.TowerDefense = (function($){
 				result = true;
 			}
 		}
-		if(bgRow==wRow){ //same row, check col range
+		if(bgRow===wRow){ //same row, check col range
 			//log('looking for '+bgCol+' in '+weaponColRange);
 			//log(ArrayIncludes(weaponColRange,bgCol));
 			if(td.ArrayIncludes(weaponColRange,bgCol)){
@@ -367,8 +368,8 @@ window.TowerDefense = (function($){
 	
 	td.GetRangeArray = function(start, range){
 		var result = [];
-		start = parseInt(start);
-		range = parseInt(range);
+		start = parseInt(start,10);
+		range = parseInt(range,10);
 		
 		var max = start+range;
 		var min = start-range;
@@ -383,7 +384,7 @@ window.TowerDefense = (function($){
 	};
 	
 	td.ArrayIncludes = function(arr,obj) {
-	    return (arr.indexOf(obj) != -1);
+	    return (arr.indexOf(obj) !== -1);
 	};
 	
 	td.moveMe = function(e) {
@@ -452,7 +453,7 @@ window.TowerDefense = (function($){
 		//deduct the money from your score
 		td.score = td.score - $(htmlElement).text().replace('$','');
 		td.scoreChanged = true;
-	}
+	};
 	
 	return td;
 }(jQuery));
