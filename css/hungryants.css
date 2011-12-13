@@ -237,7 +237,20 @@ body {
 	float: left;
 }
 
+.lifebar{
+	width: 50px;
+	height: 10px;
+	border: 1px black solid;
+	background: white;
+	z-index: 10;
+	margin: 2px 5px;
+}
 
+.lifebar-meter{
+	height: 10px;
+	background: red;
+	z-index: 11;
+}
 
 
 
@@ -248,7 +261,7 @@ body {
 .ant1 {
 	width:40px;
 	height:40px;
-	margin: 10px;
+	margin: 2px 10px 2px 10px;
 }
 
 .ant2 {

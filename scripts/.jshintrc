@@ -25,7 +25,7 @@
     "forin": false,
     "immed": true,
     "laxbreak": false,
-    "newcap": true,
+    "newcap": false,
     "noarg": true,
     "noempty": false,
     "nonew": false,

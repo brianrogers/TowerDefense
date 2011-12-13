@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Tower Defense - Level Builder</title>
+	<link rel="stylesheet" href="css/hungryants.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<link rel="stylesheet" href="css/lb.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<script src="scripts/libs/modernizr-2.0.6.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="scripts/libs/jquery-1.6.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+	<script src="scripts/libs/webkitdragdrop.js" type="text/javascript" charset="utf-8"></script>
+	<script src="scripts/mylibs/plugins.js" type="text/javascript" charset="utf-8"></script>
+	<script src="scripts/mylibs/towerdefense-levelbuilder.js" type="text/javascript" charset="utf-8"></script>
+	
+</head>
+<body>
+	<div id="header">Tower Defense - Level Builder</div>
+	<div id="level-builder">
+		<div id="bad-guys-header">Available Bad Guys</div>
+		<div id="bad-guys"></div>
+		<div id="available-weapons"></div>
+		<div id="wave-selector-container">
+			<select id="wave-selector">
+				<option>Wave 1</option>
+			</select>
+		</div>
+		<div><button id="new-wave-button">Add New Wave</button></div>
+		<div id="bad-guy-order-header">Bad Guys In Wave 1</div>
+		<button id="clear-bad-guy-order">Clear Wave</button>
+		<div id="bad-guy-order"></div>
+		<div id="level-weapons"></div>
+		<div id="json-data"></div>
+	</div>
+	<script>
+		$(document).ready(function(){
+			TowerDefenseLevelBuilder.init();
+		});
+	</script>
+</body>
+</html>
